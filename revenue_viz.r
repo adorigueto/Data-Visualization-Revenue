@@ -5,7 +5,9 @@ library(scales)
 library(plotly)
 
 # Read file
-mPlanejamento <- Controle_Orcamento
+setwd("C:/Users/Andre.Canal/OneDrive - MEGAWORK/personal-mega/03_code/01")
+mPlanejamento <- data.frame(read.csv("revenue.csv", header = TRUE, sep = ';'))
+head(mPlanejamento)
 colnames(mPlanejamento)
 
 # Choose fields to include
