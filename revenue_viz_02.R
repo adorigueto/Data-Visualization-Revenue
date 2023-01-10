@@ -19,18 +19,17 @@ list_of_fields <- c(mPlanejamento[1]		# Budget
                     , mPlanejamento[3]    	# Date
                     , mPlanejamento[4]    	# Flow type
                     , mPlanejamento[5]      # revenue
-                    , mPlanejamento[6]      # revenue_norm
 )
 
 # Create data frame
 df <- data.frame(list_of_fields)
 df$date <- as.Date(df$date, "%d/%m/%Y")
-df$revenue_norm <- as.numeric(df$revenue_norm)
+df$revenue <- as.numeric(df$revenue)
 
 
 df <- df %>%
   group_by(date, type) %>%
-  summarize(revenue = sum(revenue_norm)) %>%
+  summarize(revenue = sum(revenue)) %>%
   mutate(lab = scales::label_number_si(accuracy = 0.1)(revenue))
 
 df$type_long <- df$type
