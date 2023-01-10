@@ -5,24 +5,30 @@ library(scales)
 library(plotly)
 
 # Read file
-setwd("C:/Users/Andre.Canal/OneDrive - MEGAWORK/personal-mega/03_code/01")
+setwd("C:/Users/Andre.Canal/OneDrive - MEGAWORK/personal-mega/03_code/01_Planejamento_Comercial")
 mPlanejamento <- data.frame(read.csv("revenue_with_type.csv", header = TRUE, sep = ';'))
 head(mPlanejamento)
 colnames(mPlanejamento)
 
 # Choose fields to include
-list_of_fields <- c(mPlanejamento[1]		# Data
-                    , mPlanejamento[2]    	# Tipo de Fluxo
-                    , mPlanejamento[3]    	# revenue
-                    , mPlanejamento[4]    	# Financeira
-                    , mPlanejamento[5]    	# Economica
+list_of_fields <- c(mPlanejamento[1]		# Budget
+                    , mPlanejamento[2]    	# Sales order
+                    , mPlanejamento[3]    	# Date
+                    , mPlanejamento[4]    	# Flow type
+                    , mPlanejamento[5]      # revenue
+                    , mPlanejamento[6]      # revenue_norm
 )
 
 # Create data frame
 df <- data.frame(list_of_fields)
-df$date <- as.Date(df$date)
+df$date <- as.Date(df$date, "%d/%m/%Y")
+df$revenue_norm <- as.numeric(df$revenue_norm)
 
-typeof(df$date)
+
+df <- df %>%
+  group_by(date, type) %>%
+  summarize(revenue = sum(revenue_norm))
+
 
 # Plot
 a <- ggplot(df, aes(x = date)) +
@@ -33,7 +39,7 @@ a <- ggplot(df, aes(x = date)) +
   
   # Colors
   scale_color_manual(values = c("financial" = "#e6714b", "economic" = "#666d74"), guide = "none") +
-  scale_fill_manual(name = "revenue", values = c("F" = "#e6714b", "economic" = "#666d74"), labels = c("financial" = "financial", "economic" = "economic")) +
+  scale_fill_manual(name = "revenue", values = c("financial" = "dodgerblue1", "economic" = "darkslategrey"), labels = c("financial" = "financial", "economic" = "economic")) +
   scale_shape_manual(values=c("financial" = 18, "economic" = 20), labels = c("financial" = "financial", "economic" = "economic"), guide = "none") +
   
   # Theme
@@ -41,8 +47,8 @@ a <- ggplot(df, aes(x = date)) +
   
   ## Visual and text elements
   theme(axis.text.x = element_text(angle=60, hjust=1),
-        text = element_text(size=9, family="72-Web", color = '#58595b'),
-        legend.title = element_text(color="#58595b", size=9),
+        text = element_text(size=9, family="72-Web", color = 'gray30'),
+        legend.title = element_text(color="gray30", size=9),
         legend.position = "bottom",
         
         ### Grids and backgrounds
@@ -53,7 +59,15 @@ a <- ggplot(df, aes(x = date)) +
   
   ### Axis
   scale_y_continuous(name = "", labels = label_number(suffix = ' m', scale = 1e-6)) +
-  scale_x_date(name = "", date_breaks = "12 month", date_labels = "%b %Y",
+  scale_x_date(name = "", date_breaks = "1 month", date_labels = "%b %Y",
                expand = expansion(mult = c(0.01, 0.01)))
 
 a
+p <- ggplotly(a)
+p
+
+ggsave('plot_commercial_planning.png',
+       device = 'png',
+       a,
+       scale = 1,
+       dpi = 300)
