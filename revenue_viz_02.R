@@ -33,6 +33,11 @@ df <- df %>%
   summarize(revenue = sum(revenue_norm)) %>%
   mutate(lab = scales::label_number_si(accuracy = 0.1)(revenue))
 
+df$type_long <- df$type
+df$type_long[df$type_long == 'economic'] <- "Economic Revenue"
+df$type_long[df$type_long == 'financial'] <- "Financial Revenue"
+
+
 
 # Plot using GGPLOT2
 gg_fig <- ggplot(df, aes(x = date)) +
@@ -70,9 +75,11 @@ gg_fig
 pp_fig <- ggplotly(a)
 pp_fig
 
+list <- c('a', 'b')
+
 # Plot using plotly
 fig <- plot_ly() %>%
-  add_trace(df, x=df$date, y=df$revenue, color = df$type,
+  add_trace(name = paste(df$type_long), df, x=df$date, y=df$revenue, color = df$type,
             type = 'scatter', mode = 'lines+markers',
             fill = 'tozeroy', fillcolor = df$type,
             colors = c('dodgerblue1', 'darkslategray'),
@@ -85,5 +92,4 @@ fig <- plot_ly() %>%
     legend = list(x = 0.1, y = 0.9, bgcolor = "white"))
 
 fig
-
 
