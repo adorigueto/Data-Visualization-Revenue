@@ -1,3 +1,6 @@
+# This script uses two different revenue fields, one for
+#financial revenue and the other to economic revenue
+
 # Load packages
 library(ggplot2)
 library(dplyr)

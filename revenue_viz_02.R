@@ -1,3 +1,6 @@
+# This script uses only one field of revenue, and the type
+#(economic or financial) is indicated by an independent field
+
 # Load packages
 library(ggplot2)
 library(dplyr)
@@ -27,11 +30,12 @@ df$revenue_norm <- as.numeric(df$revenue_norm)
 
 df <- df %>%
   group_by(date, type) %>%
-  summarize(revenue = sum(revenue_norm))
+  summarize(revenue = sum(revenue_norm)) %>%
+  mutate(lab = scales::label_number_si(accuracy = 0.1)(revenue))
 
 
-# Plot
-a <- ggplot(df, aes(x = date)) +
+# Plot using GGPLOT2
+gg_fig <- ggplot(df, aes(x = date)) +
   
   # Area plot with point markers
   geom_area(data = df, aes(y = revenue, color = type, fill = type), alpha = 0.6, linewidth = 0.7, position = 'identity') +
@@ -62,12 +66,24 @@ a <- ggplot(df, aes(x = date)) +
   scale_x_date(name = "", date_breaks = "1 month", date_labels = "%b %Y",
                expand = expansion(mult = c(0.01, 0.01)))
 
-a
-p <- ggplotly(a)
-p
+gg_fig
+pp_fig <- ggplotly(a)
+pp_fig
 
-ggsave('plot_commercial_planning.png',
-       device = 'png',
-       a,
-       scale = 1,
-       dpi = 300)
+# Plot using plotly
+fig <- plot_ly() %>%
+  add_trace(df, x=df$date, y=df$revenue, color = df$type,
+            type = 'scatter', mode = 'lines+markers',
+            fill = 'tozeroy', fillcolor = df$type,
+            colors = c('dodgerblue1', 'darkslategray'),
+            symbol = df$type, symbols = c('circle', 'diamond'),
+            hoveron = 'points', hoverinfo = 'text',
+            text = ~paste('Date: ', df$date, '\nRevenue: ', df$lab, '\nType: ', df$type)) %>%
+  layout(
+    xaxis = list(
+      type = 'date', tickformat = "%B <br>%Y"
+    ))
+
+fig
+
+
