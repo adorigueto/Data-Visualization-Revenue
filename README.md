@@ -5,5 +5,5 @@ Visualization of economic and financial revenue
 ## Methodology
 ### Three methodologies were used to visualize the revenue
 #### 1. revenue_viz_01.r: Using two revenue fields separately
-#### 2. revenue_viz_01.r: Using only one revenue and the type field to differ both revenues in the graph AND Using ggplot2
-#### 3. revenue_viz_01.r: Using only one revenue and the type field to differ both revenues in the graph AND Using Plotly
+#### 2. revenue_viz_02.r: Using only one revenue and the type field to differ both revenues in the graph AND Using ggplot2
+#### 3. revenue_viz_02.r: Using only one revenue and the type field to differ both revenues in the graph AND Using Plotly
