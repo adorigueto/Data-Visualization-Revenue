@@ -87,7 +87,9 @@ fig <- plot_ly() %>%
             text = ~paste('Date: ', df$date, '\nRevenue: ', df$lab, '\nType: ', df$type)) %>%
   layout(
     xaxis = list(
-      type = 'date', tickformat = "%B <br>%Y"),
+      rangeslider = list(visible = T, thickness = 0.05),
+                 #dtick = 'M2',
+                 type = 'date', tickformat = "%B <br>%Y"),
     legend = list(x = 0.1, y = 0.9, bgcolor = "white"))
 
 fig
