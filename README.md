@@ -6,6 +6,7 @@ The initial data table contains a field of date, revenue and revenue type. The d
 
 ## Methodology
 Three methodologies were used to visualize the revenue
+
 1st Methodology: Using two revenue fields separately
       Files: revenue_viz_01.R, revenue.csv
       Plot engine: ggplot2
